@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мій Блог з Транзакціями</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #3730a3;
+            --danger-color: #dc2626;
+            --success-color: #10b981; /* Для лайків */
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --text-secondary: #6b7280;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 2rem;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 0;
+        }
+
+        header h1 { margin: 0; font-size: 1.8rem; color: var(--primary-color); }
+        header p { margin: 0; color: var(--text-secondary); font-size: 0.9rem; }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 900px) {
+            .main-layout {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f3f4f6;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        textarea { min-height: 80px; resize: vertical; }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: white;
+            transition: background-color 0.2s;
+            width: 100%;
+            text-align: center;
+        }
+        .btn-primary { background-color: var(--primary-color); }
+        .btn-primary:hover { background-color: var(--primary-dark); }
+
+        /* Стилі для постів */
+        .post { border-left: 4px solid var(--primary-color); }
+
+        .post-header {
+            margin-bottom: 0.8rem;
+        }
+        .post-title { margin: 0; font-size: 1.4rem; color: var(--text-color); }
+        .post-content { white-space: pre-wrap; color: #4b5563; line-height: 1.7; margin-bottom: 1.5rem; }
+
+        /* НОВЕ: Панель дій поста (лайки + видалення) */
+        .post-actions {
+            display: flex;
+            justify-content: space-between; /* Розводить лайки вліво, видалення вправо */
+            align-items: center;
+            border-top: 1px solid #f3f4f6;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .reactions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Кнопки реакцій */
+        .btn-reaction {
+            background: none;
+            border: 1px solid #d1d5db;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-reaction:hover {
+            background-color: #f3f4f6;
+            border-color: var(--text-secondary);
+        }
+        .btn-like:hover { color: var(--success-color); border-color: var(--success-color); background-color: #ecfdf5; }
+        .btn-dislike:hover { color: var(--danger-color); border-color: var(--danger-color); background-color: #fef2f2; }
+
+        .btn-danger-text {
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .btn-danger-text:hover { text-decoration: underline; }
+
+
+        /* Логи */
+        .log-container {
+            max-height: 250px;
+            overflow-y: auto;
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .log-list { list-style: none; padding: 0; margin: 0; }
+        .log-item {
+            padding: 6px 0;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .log-item:last-child { border-bottom: none; }
+        .log-time { color: var(--text-secondary); font-family: monospace; font-size: 0.75rem; }
+        .log-action { font-weight: 600; color: var(--text-color); }
+
+        /* Статистика */
+        .stat-card {
+            background: #e0e7ff;
+            color: var(--primary-dark);
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .reset-btn-container { margin-top: 2rem; text-align: center; }
+        .btn-reset {
+            background-color: transparent;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border: 1px dashed #d1d5db;
+            padding: 8px;
+        }
+        .btn-reset:hover { color: var(--danger-color); border-color: var(--danger-color); }
+        .log-container::-webkit-scrollbar { width: 6px; }
+        .log-container::-webkit-scrollbar-track { background: #f1f1f1; }
+        .log-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div>
+                <h1>Мій Блог</h1>
+                <p>Flask + PostgreSQL</p>
+            </div>
+            <div style="text-align: right; font-size: 0.8rem; color: #666;">
+                Гість
+            </div>
+        </div>
+    </header>
+
+    <div class="container main-layout">
+
+        <!-- ЛІВА КОЛОНКА: Контент (Пости) -->
+        <section class="content-column">
+            <h2 style="border: none; font-size: 1.5rem; margin-bottom: 1.5rem;">Стрічка новин</h2>
+
+            {% for post in posts %}
+                <div class="card post">
+                    <div class="post-header">
+                        <h3 class="post-title">{{ post.title }}</h3>
+                    </div>
+                    <div class="post-content">{{ post.content }}</div>
+
+                    <!-- НОВА СЕКЦІЯ: Дії (Лайки та Видалення) -->
+                    <div class="post-actions">
+                        <!-- Блок реакцій -->
+                        <div class="reactions">
+                            <!-- Форма ЛАЙК -->
+                            <form action="{{ url_for('react_post', id=post.id, action='like') }}" method="POST" style="margin:0;">
+                                <button type="submit" class="btn-reaction btn-like">
+                                    👍 <span>{{ post.likes }}</span>
+                                </button>
+                            </form>
+
+                            <!-- Форма ДИЗЛАЙК -->
+                            <form action="{{ url_for('react_post', id=post.id, action='dislike') }}" method="POST" style="margin:0;">
+                                <button type="submit" class="btn-reaction btn-dislike">
+                                    👎 <span>{{ post.dislikes }}</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Блок видалення -->
+                        <form action="{{ url_for('delete_post', id=post.id) }}" method="POST" style="margin:0;">
+                            <button type="submit" class="btn-danger-text" onclick="return confirm('Перемістити в архів?')">
+                                Видалити пост
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card" style="text-align: center; padding: 3rem;">
+                    <p style="color: var(--text-secondary); font-size: 1.1rem;">Постів поки немає.</p>
+                </div>
+            {% endfor %}
+        </section>
+
+        <!-- ПРАВА КОЛОНКА: Інструменти (Сайдбар) -->
+        <aside class="sidebar-column">
+
+            <!-- 1. Статистика -->
+            <div class="stat-card">
+                <div style="margin-bottom: 10px;">
+                    <a href="{{ url_for('view_archive') }}" style="text-decoration: none; color: inherit; display: block; cursor: pointer;" title="Перейти до архіву">
+                        📂 В архіві постів: {{ archive_count }}
+                    </a>
+                </div>
+                {% if archive_count > 0 %}
+                    <a href="{{ url_for('view_archive') }}" class="btn" style="background-color: #6366f1; display: inline-block; text-decoration: none; color: white; font-size: 0.9rem;">
+                        Переглянути архів
+                    </a>
+                {% endif %}
+            </div>
+
+            <!-- 2. Форма створення -->
+            <div class="card">
+                <h2>Новий запис</h2>
+                <form action="{{ url_for('add_post') }}" method="POST">
+                    <div class="form-group">
+                        <label for="title">Заголовок</label>
+                        <input type="text" id="title" name="title" placeholder="Введіть тему..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Текст</label>
+                        <textarea id="content" name="content" placeholder="Що нового?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Опублікувати</button>
+                </form>
+            </div>
+
+            <!-- 3. Журнал транзакцій -->
+            <div class="card">
+                <h2>Останні дії (Log)</h2>
+                <div class="log-container">
+                    {% if logs %}
+                        <ul class="log-list">
+                            {% for log in logs %}
+                                <li class="log-item">
+                                    <span class="log-action">{{ log.action }}</span>
+                                    <span class="log-time">{{ log.timestamp }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p style="color: var(--text-secondary); text-align: center; font-size: 0.8rem;">Журнал порожній</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 4. Reset DB -->
+            <div class="reset-btn-container">
+                <form action="{{ url_for('reset_db') }}" method="POST">
+                    <button type="submit" class="btn btn-reset" onclick="return confirm('УВАГА! Це видалить ВСІ дані. Продовжити?')">
+                        ⚠ Скинути базу даних (Reset)
+                    </button>
+                </form>
+            </div>
+
+        </aside>
+
+    </div>
+</body>
+</html>

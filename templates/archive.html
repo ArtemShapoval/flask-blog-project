@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архів Постів</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --text-secondary: #6b7280;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; }
+
+        h1 { text-align: center; color: var(--primary-color); margin-bottom: 30px; }
+
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #fff;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border: 1px solid #d1d5db;
+            transition: background-color 0.2s;
+        }
+        .btn-back:hover { background-color: #e5e7eb; }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+            opacity: 0.85; /* Трохи прозорі, щоб відрізнялись від активних */
+        }
+
+        .meta-info {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-family: monospace;
+        }
+
+        .archive-badge {
+            background-color: #fef3c7;
+            color: #d97706;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="btn-back">← Назад до новин</a>
+
+        <h1>🗄️ Архів видалених записів</h1>
+
+        {% for post in posts %}
+            <div class="card">
+                <div class="meta-info">
+                    <span>📅 Видалено: {{ post.deleted_at }}</span>
+                    <span class="archive-badge">ID оригіналу: {{ post.original_id }}</span>
+                </div>
+                <h3 style="margin-top: 0; color: #374151;">{{ post.title }}</h3>
+                <p style="white-space: pre-wrap; color: #4b5563;">{{ post.content }}</p>
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 40px; color: #6b7280;">
+                <h2>Архів порожній</h2>
+                <p>Тут з'являться пости, які ви видалите з головної сторінки.</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
