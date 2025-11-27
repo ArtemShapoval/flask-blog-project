@@ -26,7 +26,7 @@
 ---
 
 ## 🎯 Мета та Концепція Проєкту
-![1]<img width="1185" height="850" alt="Image" src="https://github.com/user-attachments/assets/05f9c378-6327-4c19-b92a-81d51c3220cf" />
+<img width="1185" height="850" alt="Image" src="https://github.com/user-attachments/assets/05f9c378-6327-4c19-b92a-81d51c3220cf" />
 
 
 Цей вебзастосунок демонструє:
