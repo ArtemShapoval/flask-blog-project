@@ -79,7 +79,7 @@ II. Логіка на рівні PostgreSQL
 Приклад виклику:
 
 sql
-Копировать код
+
 SELECT get_post_rating(likes, dislikes) AS rating
 FROM posts;
 2. Тригер: автоматичне оновлення updated_at
@@ -107,30 +107,30 @@ PostgreSQL + pgAdmin
 
 2. Встановлення залежностей
 bash
-Копировать код
+
 pip install flask psycopg2
 3. Налаштування БД
 У файлі main.py:
 
 python
-Копировать код
+
 DB_NAME = "flask_blog"
 DB_USER = "postgres"
 DB_PASS = "ВАШ_ПАРОЛЬ"
 4. Запуск серверу
 bash
-Копировать код
+
 python main.py
 Перейдіть у браузері:
 
 cpp
-Копировать код
+
 http://127.0.0.1:5000/
 Крок ініціалізації
 Натисніть:
 
 scss
-Копировать код
+
 ⚠ Скинути базу даних (Reset)
 Це створить:
 
