@@ -53,6 +53,8 @@
 | **Frontend** | HTML5 / CSS3 | Інтерфейс |
 
 ---
+ERD for Database:
+<img width="1810" height="935" alt="Image" src="https://github.com/user-attachments/assets/57a05ba2-c706-471f-95de-1d3d2ed601d3" />
 
 ## 🔒 Реалізована Логіка та Архітектура
 
