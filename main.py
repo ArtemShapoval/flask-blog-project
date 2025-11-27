@@ -114,7 +114,7 @@ def populate_db():
                     ('Популярна тема', 'PostgreSQL набагато потужніший за SQLite.', 100, 5))
 
         cur.execute('INSERT INTO audit_log (action) VALUES (%s)',
-                    ('Міграція на PostgreSQL виконана',))
+                    ('Міграція на PostgreSQL виконана.',))
 
         conn.commit()
         print("Тестові дані додано.")
